@@ -9,7 +9,7 @@ import 'rxjs/add/operator/map';
 })
 export class UserService {
 
-  readonly rootUrl = 'https://nyclibrary.appspot.com';
+  readonly rootUrl = 'https://nyclibrary-api.appspot.com';
   constructor(private http: HttpClient) { }
 
   public welcome(){
