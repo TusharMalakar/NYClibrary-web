@@ -1,49 +1,44 @@
-import {Injectable} from '@angular/core';
-import {HttpEvent, HttpInterceptor, HttpResponse} from '@angular/common/http';
-import {HttpHandler, HttpRequest, HttpErrorResponse} from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { of } from 'rxjs';
-import { tap, catchError } from 'rxjs/operators';
-import { UserService } from 'src/app/apiServices/dataAccess/user.service';
+import { Observable } from 'rxjs/Observable';
+import { HttpInterceptor, HttpRequest, HttpHandler, HttpUserEvent, HttpEvent } from "@angular/common/http";
+import 'rxjs/add/operator/do';
+import { Injectable } from "@angular/core";
+import { Router } from "@angular/router";
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
 
-  constructor(private authService: UserService ) {}
+    constructor(private router: Router) { }
 
-  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    if (this.authService.isAuthenticated()==true) {
-      const authReq = req.clone({
-        headers: req.headers.set(
-          'Authorization',
-          this.authService.getToken()
-        )
-      });
-      console.log('Making an authorized request');
-      req = authReq;
+    //Handler: Will intercept any http request going out.
+    intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+
+        //If the request doesn't need auth; use this.
+        //req.headers.get('No-Auth') :  This checks the header of the request
+        //next.handle(req.clone()) : clone the whole request and send it
+        if (req.headers.get('No-Auth') == "True")
+            return next.handle(req.clone());
+
+        //If we do need auth, first if will fail.
+        //localStorage.getItem('accessToken') : Will check if there is a token in local storage
+        if (localStorage.getItem('accessToken') != null) {
+            //Copies request that was caught and adds the authorization
+            const clonedreq = req.clone({
+                headers: req.headers.set("capstoneAuth", localStorage.getItem('accessToken'))
+            });
+            //This sends the request that was cloned.
+            return next.handle(clonedreq).do(
+                //If Successful
+                succ => {},
+                //If error
+                err => {
+                    if (err.status === 401)
+                        this.router.navigateByUrl('/login');
+                }
+                );
+        }
+        //If no token, send user to login.
+        else {
+            this.router.navigateByUrl('/login');
+        }
     }
-    
-    return next.handle(req).pipe(
-      tap(
-        event => this.handleResponse(req, event),
-        error => this.handleError(req, error)
-      )
-    );
-  }
-
-
-  handleResponse(req: HttpRequest<any>, event) {
-    console.log('Handling response for ', req.url, event);
-    if (event instanceof HttpResponse) {
-      console.log('Request for ', req.url,
-          ' Response Status ', event.status,
-          ' With body ', event.body);
-    }
-  }
-
-  handleError(req: HttpRequest<any>, event) {
-    console.error('Request for ', req.url,
-          ' Response Status ', event.status,
-          ' With error ', event.error);
-  }
 }

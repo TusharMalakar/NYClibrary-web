@@ -1,8 +1,8 @@
-import { UserService } from 'src/app/apiServices/dataAccess/user.service';
+import { UserService } from '../shared/dbAccess/user.service';
 import { Injectable } from '@angular/core';
-import {  CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
-import { Observable } from 'rxjs';
-import {Route} from '@angular/compiler/src/core';
+import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
+import { Route } from '@angular/compiler/src/core';
+
 
 @Injectable()
 export class AuthGuard implements CanActivate {

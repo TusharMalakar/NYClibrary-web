@@ -1,15 +1,7 @@
 import { NgModule } from '@angular/core';
-import { AppComponent } from './app.component';
+import { AuthGuard } from './guard/auth.guard';
 import { Routes, RouterModule, CanActivate } from '@angular/router';
 
-import {AuthGuard} from '../app/guard/auth.guard';
-// import {LoginComponent} from '../app/login/login/login.component';
-// import {HomeComponent}  from '../app/homepage/home/home.component';
-
-// import {LoginModule} from '../app/login/login.module';
-// import {HomepageModule} from '../app/homepage/homepage.module';
-
-// import { from } from 'rxjs';
 /**
 * @author Tushar Malakar
 * 
@@ -26,16 +18,24 @@ import {AuthGuard} from '../app/guard/auth.guard';
 const routes: Routes = [
   {
     path : 'login', 
-    loadChildren : '../app/login/login.module#LoginModule',
+    loadChildren : './login/login.module#LoginModule',
     canActivate: [AuthGuard]
   },
-
+  {
+    path:'register', 
+    loadChildren : './register/register.module#RegisterModule',
+    canActivate: [AuthGuard]
+  },
   {
     path:'home', 
-    loadChildren : '../app/homepage/homepage.module#HomepageModule',
+    loadChildren : './home/home.module#HomeModule',
     canLoad: [AuthGuard]
   },
-  
+  {
+    path : 'user',
+    loadChildren : './user/user.module#UserModule',
+    canLoad: [AuthGuard]
+  },
   //default component
   {
     path:'**', 
