@@ -1,8 +1,15 @@
-
 import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import { Routes, RouterModule, CanActivate } from '@angular/router';
 
+import {AuthGuard} from '../app/guard/auth.guard';
+// import {LoginComponent} from '../app/login/login/login.component';
+// import {HomeComponent}  from '../app/homepage/home/home.component';
+
+// import {LoginModule} from '../app/login/login.module';
+// import {HomepageModule} from '../app/homepage/homepage.module';
+
+// import { from } from 'rxjs';
 /**
 * @author Tushar Malakar
 * 
@@ -19,25 +26,16 @@ import { Routes, RouterModule, CanActivate } from '@angular/router';
 const routes: Routes = [
   {
     path : 'login', 
-    loadChildren : './login/login.module#LoginModule',
-    // canActivate: [AuthGuard]
+    loadChildren : '../app/login/login.module#LoginModule',
+    canActivate: [AuthGuard]
   },
-  // {
-  //   path:'register', 
-  //   loadChildren : './register/register.module#RegisterModule',
-  //   canActivate: [AuthGuard]
-  // },
+
   {
     path:'home', 
-    loadChildren : './homepage/homepage.module#HomepageModule',
-    // canLoad: [AuthGuard]
+    loadChildren : '../app/homepage/homepage.module#HomepageModule',
+    canLoad: [AuthGuard]
   },
-  // {
-  //   path: 'user',
-  //   loadChildren: './user/user.module#UserModule',
-  //   // canLoad: [AuthGuard]
-  // },
-
+  
   //default component
   {
     path:'**', 
