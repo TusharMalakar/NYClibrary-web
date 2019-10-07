@@ -1,3 +1,4 @@
+import { UserService } from './../../shared/dbAccess/user.service';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -7,9 +8,18 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HomeComponent implements OnInit {
 
-  constructor() { }
+  book_list : any;
+  constructor(private userservice : UserService) { }
 
   ngOnInit() {
+  }
+
+  get_all_book_list(){
+
+    this.userservice.get_booklist().subscribe((data : any)=>{
+      this.book_list =data;
+      return this.book_list;
+    });
   }
 
 }

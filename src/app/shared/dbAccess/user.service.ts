@@ -6,22 +6,23 @@ import { Observable } from 'rxjs/Observable';
 
 @Injectable()
 export class UserService {
-  readonly rootUrl = 'http://13.58.204.157:5000';
+  // readonly rootUrl = 'https://api000.appspot.com';
+  readonly rootUrl = ' http://127.0.0.1:5000/';
   constructor(private http: HttpClient) { }
   
   getToken(){
     return localStorage.getItem('accessToken')
   }
 
-  //"/user?username="+UserName+"&password="password
-  userAuthentication(userName: string, password: string) {
+  //"/user?email="+email+"&password="password
+  userAuthentication(email: string, password: string) {
     var reqHeader = new HttpHeaders({'No-Auth':'True'});
-    return this.http.get(this.rootUrl +"/auth/login?"+"username="+userName+"&password="+password, {headers : reqHeader});
+    return this.http.get(this.rootUrl +"/auth/login?"+"email="+email+"&password="+password, {headers : reqHeader});
   }
 
-  registerUser(username, password ) {
+  registerUser(email, password ) {
     const body: UserModel = {
-      username: username,
+      email: email,
       password: password,
     }
 
@@ -29,7 +30,7 @@ export class UserService {
     var reqHeader = new HttpHeaders({'No-Auth':'True'});
 
     //Adding Parameters
-    var requestedUrl = this.rootUrl + "/user?username="+username+"&password="+password;
+    var requestedUrl = this.rootUrl + "/public/create_user?email="+email+"&password="+password;
 
     //Testing url 
     console.log(requestedUrl);
@@ -48,110 +49,112 @@ export class UserService {
   return this.http.get<UserModel>( this.rootUrl +"/user");
   }
 
-  getMemberdetails(username: string): Observable<UserModel> {
-    return this.http.get<UserModel>( this.rootUrl +"/user/" + username);
+  get_booklist(){
+    return this.http.get( this.rootUrl +"/public/book_list");
+  }
+  
+  search_a_book(book_name:string){
+    return this.http.get( this.rootUrl +"/public/search?book_name=" + book_name);
   }
 
   
 
-  
+//   getUserSkills(userName: string) { 
+//     return this.http.get( this.rootUrl + "/user/skills/" + userName).toPromise();
+//   }
 
-  getUserSkills(userName: string) { 
-    return this.http.get( this.rootUrl + "/user/skills/" + userName).toPromise();
-  }
+//   getUserClasses(userName: string){ 
+//     return this.http.get( this.rootUrl +"/user/classes/" + userName).toPromise();
+//   }
 
-  getUserClasses(userName: string){ 
-    return this.http.get( this.rootUrl +"/user/classes/" + userName).toPromise();
-  }
-
-  async getUserSkillsAndClasses(username: string){
+//   async getUserSkillsAndClasses(username: string){
     
-    let xAxisReq: Array<string> = [];
-    let classes: string[];
-    let skills: string[];
+//     let xAxisReq: Array<string> = [];
+//     let classes: string[];
+//     let skills: string[];
 
-    await this.getUserSkills(username).then(function(result){
-      xAxisReq = result["skills"];
-    });
+//     await this.getUserSkills(username).then(function(result){
+//       xAxisReq = result["skills"];
+//     });
 
-    await this.getUserClasses(username).then(function(result){
-      classes = result["classes"];
-    });
+//     await this.getUserClasses(username).then(function(result){
+//       classes = result["classes"];
+//     });
     
     
-    /*
-    for(let classTaken of classes){
-        xAxisReq.push({
-        skillOrClass: classTaken,
-        type: "class"
-      });
+//     /*
+//     for(let classTaken of classes){
+//         xAxisReq.push({
+//         skillOrClass: classTaken,
+//         type: "class"
+//       });
     
-    for(let skill of skills){
-      xAxisReq.push({
-      skillOrClass: skill,
-      type: "skill"
-    });
-  }
-  */
+//     for(let skill of skills){
+//       xAxisReq.push({
+//       skillOrClass: skill,
+//       type: "skill"
+//     });
+//   }
+//   */
 
-    return xAxisReq;
-  }
+//     return xAxisReq;
+//   }
 
-searchSkills(constrain: string): Observable<any>{
-  let params = new HttpParams().set("query",constrain);
-  return this.http.get(this.rootUrl +"/search/skills",{params: params});
-}
+// searchSkills(constrain: string): Observable<any>{
+//   let params = new HttpParams().set("query",constrain);
+//   return this.http.get(this.rootUrl +"/search/skills",{params: params});
+// }
 
-searchClasses(constrain: string): Observable<any>{
-  let params = new HttpParams().set("query",constrain);
-  return this.http.get(this.rootUrl +"/search/classes",{params: params});
-}
+// searchClasses(constrain: string): Observable<any>{
+//   let params = new HttpParams().set("query",constrain);
+//   return this.http.get(this.rootUrl +"/search/classes",{params: params});
+// }
 
-getPicture(){
-  return this.http.get(this.rootUrl + "/user/profilePicture", {responseType: 'text'});
-}
+// getPicture(){
+//   return this.http.get(this.rootUrl + "/user/profilePicture", {responseType: 'text'});
+// }
 
-getMemberPicture(username: string){
-  return this.http.get( this.rootUrl +"/user/profilePicture?username=" + username , {responseType: 'text'});
-}
+// getMemberPicture(username: string){
+//   return this.http.get( this.rootUrl +"/user/profilePicture?username=" + username , {responseType: 'text'});
+// }
 
-uploadProfilePicture(fileToUpload: File){
-  const formData: FormData = new FormData();
-  formData.append('pic', fileToUpload, fileToUpload.name);
-  return this.http.post(this.rootUrl+"/user/profilePicture", formData)
-}
+// uploadProfilePicture(fileToUpload: File){
+//   const formData: FormData = new FormData();
+//   formData.append('pic', fileToUpload, fileToUpload.name);
+//   return this.http.post(this.rootUrl+"/user/profilePicture", formData)
+// }
 
-// /collab/deleteCollab 
-///collab/getRecommendedCollab
+// // /collab/deleteCollab 
+// ///collab/getRecommendedCollab
 
-  //___________POST_________________
+//   //___________POST_________________
 
-//you can update user profile taking all these as input but "Not required"
-updateUserProfile(userData: UserModel){
-  const body : UserModel ={
-    name : userData.username,
-    github  : userData.github,
-    linkedin: userData.linkedin,
-  }
-  return this.http.post(this.rootUrl +"/user", body)
-}
+// //you can update user profile taking all these as input but "Not required"
+// updateUserProfile(userData: UserModel){
+//   const body : UserModel ={
+//     name : userData.username,
+//     github  : userData.github,
+//     linkedin: userData.linkedin,
+//   }
+//   return this.http.post(this.rootUrl +"/user", body)
+// }
 
-updateUserSkills(skills){
-  const body : UserModel ={
-    skills  :skills,
+// updateUserSkills(skills){
+//   const body : UserModel ={
+//     skills  :skills,
     
-  }
-  console.log(body)
-  return this.http.post(this.rootUrl +"/user", body)
-}
-updateUserclass(classes){
-  const body : UserModel ={
-    classes:classes
-  }
-  console.log(body)
-  return this.http.post(this.rootUrl +"/user", body)
+//   }
+//   console.log(body)
+//   return this.http.post(this.rootUrl +"/user", body)
+// }
+// updateUserclass(classes){
+//   const body : UserModel ={
+//     classes:classes
+//   }
+//   console.log(body)
+//   return this.http.post(this.rootUrl +"/user", body)
 
-}
+// }
 
 
 

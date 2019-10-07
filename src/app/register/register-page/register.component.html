@@ -8,23 +8,23 @@
     
     <form [formGroup] = "form" (ngSubmit) = "onSubmit()">
 
-      <!-- Username Field -->
+      <!-- email Field -->
       <div class="form-container">
         <mat-form-field>
 
-            <!-- Associate key from ts file: username -->
+            <!-- Associate key from ts file: email -->
             <input 
-                formControlName = "username"
+                formControlName = "email"
                 matInput
-                id="username" 
+                id="email" 
                 type="email" 
                 class="form-control"
                 placeholder="Hunter Email...">
         </mat-form-field>
-        <div *ngIf="username.touched && username.invalid" 
+        <div *ngIf="email.touched && email.invalid" 
               class="alert alert-danger">
-              <mat-error *ngIf="username.errors.required">Email is <strong>Required!</strong></mat-error>
-              <mat-error *ngIf="username.errors.email">Invalid <strong>Email!</strong></mat-error>
+              <mat-error *ngIf="email.errors.required">Email is <strong>Required!</strong></mat-error>
+              <mat-error *ngIf="email.errors.email">Invalid <strong>Email!</strong></mat-error>
         </div>
       </div>
       
@@ -32,7 +32,7 @@
       <div class="form-container">
           <mat-form-field>
   
-              <!-- Associate key from ts file: username -->
+              <!-- Associate key from ts file: email -->
               <input 
                   formControlName = "password"
                   matInput
@@ -55,7 +55,7 @@
       <div class="form-container">
           <mat-form-field>
   
-              <!-- Associate key from ts file: username -->
+              <!-- Associate key from ts file: email -->
               <input 
                   formControlName = "password2"
                   matInput

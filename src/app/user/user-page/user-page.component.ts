@@ -17,7 +17,7 @@ export class UserPageComponent implements OnInit {
   canMessage: boolean;
   //Will hold our user data.
   userData: UserModel;
-  username: string;
+  email: string;
   imageLink: any;
   
   
@@ -25,9 +25,7 @@ export class UserPageComponent implements OnInit {
   classesForm: FormGroup;
   filteredUsers: String[] = [];
   isLoading = false;
-  userClass:UserModel["classes"];
-  userSkill:UserModel["skills"];
-  
+ 
 
   //place holder of image
   public imageToShow: any;
@@ -64,17 +62,17 @@ export class UserPageComponent implements OnInit {
   */
   async ngOnInit() {
 
-    //Will retrieve the 'username' parameter from the url if set.
+    //Will retrieve the 'email' parameter from the url if set.
     await this.activeRoute.paramMap
     .subscribe(params => {
-      this.username = params.get('username');
+      this.email = params.get('email');
     })
 
     //Will set the 'canEdit' boolean variable depending if the user viewing the page is the owner. 
     //If so, allow that user to edit his page fields.
     await this.userService.getUserdetails()
       .subscribe(res => { 
-                if(res['username'] === this.username || this.username == null){
+                if(res['email'] === this.email || this.email == null){
                   this.canEdit = true;
                 }else{
                   this.canEdit = false;
@@ -84,18 +82,11 @@ export class UserPageComponent implements OnInit {
               }); 
   }
 
-  messageUser() {
-    this.router.navigate(['/conversations/message/', this.username]);
-  }
+  // messageUser() {
+  //   this.router.navigate(['/conversations/message/', this.email]);
+  // }
 
   
 
-  profilePicture(){
-    this.userService.getPicture().subscribe( (link) => {
-      console.log(link);
-      this.imageLink = 'http://' + link;
-      console.log(this.imageLink);
-     })
-  }
   
 }
